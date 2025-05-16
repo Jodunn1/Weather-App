@@ -1,47 +1,42 @@
-let id = '9505fd1df737e20152fbd78cdb289b6a';
-let url = 'https://api.openweathermap.org/data/2.5/weather?units=metric&appid=' + id;
-let city = document.querySelector('.name');
-let form = document.querySelector("form");
-let temperature = document.querySelector('.temperature');
-let description = document.querySelector('.description');
-let valueSearch = document.getElementById('name');
-let clouds = document.getElementById('clouds');
-let humidity = document.getElementById('humidity');
-let pressure = document.getElementById('pressure');
-let main = document.querySelector('main');
-form.addEventListener("submit", (e) => {
-    e.preventDefault();  
-    if(valueSearch.value != ''){
+const searchBar = document.getElementById("name");
+const city = document.querySelector(".name figcaption");
+const cityFlag = document.querySelector(".name img");
+const temp = document.querySelector(".temperature");
+const weatherImg = document.querySelector(".temperature img");
+const degrees = document.querySelector(".degrees");
+const description = document.querySelector(".description");
+const clouds = document.querySelector("#clouds");
+const humidity = document.getElementById("humidity");
+const pressure = document.getElementById("pressure");
+const form = document.querySelector("form")
+
+form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    if (searchBar.value) {
         searchWeather();
     }
-});
-const searchWeather = () => {
-    fetch(url+'&q='+ valueSearch.value)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            if(data.cod == 200){
-                city.querySelector('figcaption').innerHTML = data.name;
-                city.querySelector('img').src = `https://flagsapi.com/${data.sys.country}/shiny/32.png`;
-                temperature.querySelector('img').src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`;
-                temperature.querySelector('span').innerText = data.main.temp;
-                description.innerText = data.weather[0].description;
+})
 
-                clouds.innerText = data.clouds.all;
-                humidity.innerText = data.main.humidity;
-                pressure.innerText = data.main.pressure;
-            }else{
-                main.classList.add('error');
-                setTimeout(() => {
-                    main.classList.remove('error');
-                }, 1000);
-            }
-            valueSearch.value = '';
-        })
+
+const id = '962edcd6298a07c7b62a2b01e3a18d02';
+const url = `https://api.openweathermap.org/data/2.5/weather?appid=${id}&units=metric`
+
+const searchWeather = () => {
+    fetch(url + '&q=' + searchBar.value)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        updateCity(data)
+    })
 }
-// search Default
-const initApp = () => {
-    valueSearch.value = 'Washington';
-    searchWeather();
+
+const updateCity = (data) => {
+    city.innerText = data.name
+    cityFlag.src = `https://flagsapi.com/${data.sys.country}/shiny/32.png`
 }
-initApp();
+
+
+
+
+
+
